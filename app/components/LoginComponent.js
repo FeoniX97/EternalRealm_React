@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { MyTextField } from "./MyTextField";
 import { Button } from "@mui/material";
-import * as Colyseus from "colyseus.js";
-import { fontZY } from "../page";
-
-const client = new Colyseus.Client("ws://localhost:2567");
+import { client, fontZY } from "../page";
 
 export default function LoginComponent({ onLoggedIn }) {
   const [_username, setUsername] = useState("admin");
@@ -19,11 +16,10 @@ export default function LoginComponent({ onLoggedIn }) {
         password: _password,
       });
 
-      authRoom.onMessage("token", (message) => {
-        console.log(message);
+      authRoom.onMessage("token", (token) => {
+        console.log("token received from server: " + token);
+        onLoggedIn(authRoom, token);
       });
-
-      onLoggedIn(authRoom);
     } catch (err) {
       alert(err);
     }

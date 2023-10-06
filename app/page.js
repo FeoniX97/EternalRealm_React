@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import { useState } from "react";
 import LoginComponent from "./components/LoginComponent";
 import { Button } from "@mui/material";
+import * as Colyseus from "colyseus.js";
+import ResourceHUDComponent from "./components/ResourceHUDComponent";
 
 export const fontZY = localFont({
   src: "./fonts/ZhunYuan.ttf",
@@ -11,17 +13,22 @@ export const fontZY = localFont({
   variable: "--font-zy",
 });
 
+export const client = new Colyseus.Client("ws://localhost:2567");
+export let authRoom;
+
 export default function Home() {
   const [_loggedIn, setLoggedIn] = useState(false);
-  const [_authRoom, setAuthRoom] = useState();
+  const [_token, setToken] = useState();
 
-  const handleLoggedIn = (authRoom) => {
-    setAuthRoom(authRoom);
+  const handleLoggedIn = async (_authRoom, token) => {
     setLoggedIn(true);
+
+    authRoom = _authRoom;
+    setToken(token);
   };
 
   const handleLogout = () => {
-    _authRoom.leave();
+    authRoom.leave();
     setLoggedIn(false);
   };
 
@@ -32,14 +39,17 @@ export default function Home() {
       {!_loggedIn ? (
         <LoginComponent onLoggedIn={handleLoggedIn} />
       ) : (
-        <Button
-          variant="contained"
-          className={`mt-5 ${fontZY.className}`}
-          style={{ backgroundColor: "#2196F3" }}
-          onClick={handleLogout}
-        >
-          Leave
-        </Button>
+        <div className="flex flex-col">
+          <ResourceHUDComponent token={_token} />
+          <Button
+            variant="contained"
+            className={`mt-5 ${fontZY.className}`}
+            style={{ backgroundColor: "#2196F3" }}
+            onClick={handleLogout}
+          >
+            Leave
+          </Button>
+        </div>
       )}
     </main>
   );
