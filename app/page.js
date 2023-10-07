@@ -24,7 +24,8 @@ export default function Home() {
     setLoggedIn(true);
 
     authRoom = _authRoom;
-    setToken(token);
+
+    if (token !== _token) setToken(token);
   };
 
   const handleLogout = () => {
@@ -43,11 +44,11 @@ export default function Home() {
           <ResourceHUDComponent token={_token} />
           <Button
             variant="contained"
-            className={`mt-5 ${fontZY.className}`}
+            className={`mt-5`}
             style={{ backgroundColor: "#2196F3" }}
             onClick={handleLogout}
           >
-            Leave
+            登出
           </Button>
         </div>
       )}
