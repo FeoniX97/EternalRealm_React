@@ -1,11 +1,11 @@
 "use client";
 
 import localFont from "next/font/local";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginComponent from "./components/LoginComponent";
 import { Button } from "@mui/material";
 import * as Colyseus from "colyseus.js";
-import ResourceHUDComponent from "./components/ResourceHUDComponent";
+import CharacterPanel from "./components/CharacterPanel";
 
 export const fontZY = localFont({
   src: "./fonts/ZhunYuan.ttf",
@@ -41,7 +41,7 @@ export default function Home() {
         <LoginComponent onLoggedIn={handleLoggedIn} />
       ) : (
         <div className="flex flex-col">
-          <ResourceHUDComponent token={_token} />
+          {_token && <CharacterPanel token={_token} />}
           <Button
             variant="contained"
             className={`mt-5`}
