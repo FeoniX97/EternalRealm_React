@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import LoginComponent from "./components/LoginComponent";
 import { Button } from "@mui/material";
 import * as Colyseus from "colyseus.js";
-import CharacterPanel from "./components/CharacterPanel";
+import CharacterPanel from "./components/panel/CharacterPanel";
+import InventoryPanel from "./components/panel/InventoryPanel";
 
 export const fontZY = localFont({
   src: "./fonts/ZhunYuan.ttf",
@@ -41,7 +42,14 @@ export default function Home() {
         <LoginComponent onLoggedIn={handleLoggedIn} />
       ) : (
         <div className="flex flex-col">
-          {_token && <CharacterPanel token={_token} />}
+          <div className="flex">
+            {_token && (
+              <div className="mr-24">
+                <CharacterPanel token={_token} />
+              </div>
+            )}
+            {_token && <InventoryPanel token={_token} />}
+          </div>
           <Button
             variant="contained"
             className={`mt-5`}

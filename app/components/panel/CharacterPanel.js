@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { client } from "../page";
-import { toPercent } from "../utils";
+import { client } from "../../page";
+import { toPercent } from "../../utils";
 import { Button } from "@mui/material";
 
 export default function CharacterPanel({ token }) {
@@ -66,39 +66,51 @@ export default function CharacterPanel({ token }) {
         <div className="flex flex-col">
           <div className="flex">
             <Button
-              onClick={() => room.send("Character.Core.Str", { action: "dec" })}
+              onClick={() =>
+                room.send("action", { entities: "Core.Str", action: "dec" })
+              }
             >
               -
             </Button>
             <span>力量: {character?.str.value}</span>
             <Button
-              onClick={() => room.send("Character.Core.Str", { action: "inc" })}
+              onClick={() =>
+                room.send("action", { entities: "Core.Str", action: "inc" })
+              }
             >
               +
             </Button>
           </div>
           <div className="flex">
             <Button
-              onClick={() => room.send("Character.Core.Agi", { action: "dec" })}
+              onClick={() =>
+                room.send("action", { entities: "Core.Agi", action: "dec" })
+              }
             >
               -
             </Button>
             <span>灵巧: {character?.agi.value}</span>
             <Button
-              onClick={() => room.send("Character.Core.Agi", { action: "inc" })}
+              onClick={() =>
+                room.send("action", { entities: "Core.Agi", action: "inc" })
+              }
             >
               +
             </Button>
           </div>
           <div className="flex">
             <Button
-              onClick={() => room.send("Character.Core.Int", { action: "dec" })}
+              onClick={() =>
+                room.send("action", { entities: "Core.Int", action: "dec" })
+              }
             >
               -
             </Button>
             <span>智力: {character?.int.value}</span>
             <Button
-              onClick={() => room.send("Character.Core.Int", { action: "inc" })}
+              onClick={() =>
+                room.send("action", { entities: "Core.Int", action: "inc" })
+              }
             >
               +
             </Button>
