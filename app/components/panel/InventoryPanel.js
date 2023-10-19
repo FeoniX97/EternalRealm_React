@@ -1,4 +1,5 @@
 import { client, fontZY } from "@/app/page";
+import { getRarityColor } from "@/app/utils";
 import { Box, Button, Fade, Menu, MenuItem, Popper } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
@@ -69,7 +70,7 @@ export default function InventoryPanel({ token }) {
       {items &&
         items.map((item) => (
           <Button
-            style={{ color: "white" }}
+            style={{ color: getRarityColor(item.rarity?.value) }}
             onClick={(event) => handleMouseClick(event, item)}
             onMouseEnter={(event) => handleMouseEnter(event, item)}
             onMouseLeave={handleMouseLeave}
@@ -86,16 +87,22 @@ export default function InventoryPanel({ token }) {
         }}
       >
         {selectedItem &&
-          selectedItem.actions?.map((action) => (
-            <MenuItem
-              onClick={() => {
-                setAnchorElMenu(null);
-                room.send("action", { action: action.id, index: 0 });
-              }}
-            >
-              {action.label}
-            </MenuItem>
-          ))}
+          selectedItem.actions?.map(
+            (action) =>
+              action.enabled && (
+                <MenuItem
+                  onClick={() => {
+                    setAnchorElMenu(null);
+                    room.send("action", {
+                      action: action.id,
+                      index: items.indexOf(selectedItem),
+                    });
+                  }}
+                >
+                  {action.label}
+                </MenuItem>
+              )
+          )}
       </Menu>
       <Popper
         id={idPopper}
@@ -115,8 +122,16 @@ export default function InventoryPanel({ token }) {
               }}
             >
               <div className={`flex flex-col ${fontZY.className}`}>
-                <span className="font-bold mb-1">{selectedItem?.name}</span>
-                <div className="flex mb-1">
+                <span
+                  className="font-bold mb-1"
+                  style={{ color: getRarityColor(selectedItem?.rarity.value) }}
+                >
+                  {selectedItem?.name}
+                </span>
+                <div
+                  className="flex mb-1"
+                  style={{ color: getRarityColor(selectedItem?.rarity.value) }}
+                >
                   <span className="mr-2">{selectedItem?.rarity.name}</span>
                   <span>{selectedItem?.type}</span>
                 </div>
@@ -126,9 +141,30 @@ export default function InventoryPanel({ token }) {
                   </span>
                   <span>需求等级 {selectedItem?.reqLevel}</span>
                 </div>
-                {selectedItem?.customDesc && (
-                  <span className="mt-1">{selectedItem.customDesc}</span>
-                )}
+                {selectedItem?.customDesc &&
+                  selectedItem?.customDesc.length > 0 && (
+                    <div className="mt-2">
+                      {selectedItem?.customDesc.map((d) => (
+                        <p className="mt-1">{d}</p>
+                      ))}
+                    </div>
+                  )}
+                {selectedItem?.basicAffixes &&
+                  selectedItem?.basicAffixes.length > 0 && (
+                    <div className="mt-2">
+                      {selectedItem?.basicAffixes.map((basicAffix) => (
+                        <p className="mt-1">{basicAffix}</p>
+                      ))}
+                    </div>
+                  )}
+                {selectedItem?.magicAffixes &&
+                  selectedItem?.magicAffixes.length > 0 && (
+                    <div className="mt-2">
+                      {selectedItem?.magicAffixes.map((magicAffix) => (
+                        <p className="mt-1">{magicAffix}</p>
+                      ))}
+                    </div>
+                  )}
                 <span className="mt-3">{selectedItem?.desc}</span>
               </div>
             </Box>

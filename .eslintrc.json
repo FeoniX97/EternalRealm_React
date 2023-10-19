@@ -23,6 +23,7 @@
         "comma-dangle": "off",
         "prefer-const": "warn",
         "multiline-ternary": "off",
-        "react/jsx-key": "off"
+        "react/jsx-key": "off",
+        "indent": "off"
     }
 }

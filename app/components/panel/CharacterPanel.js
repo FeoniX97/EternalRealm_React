@@ -38,6 +38,7 @@ export default function CharacterPanel({ token }) {
       });
 
       room.state.onChange(() => {
+        console.log(JSON.stringify(room.state))
         setCharacter({ ...room.state });
       });
     } catch (err) {
