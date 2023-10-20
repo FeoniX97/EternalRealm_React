@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import * as Colyseus from "colyseus.js";
 import CharacterPanel from "./components/panel/CharacterPanel";
 import InventoryPanel from "./components/panel/InventoryPanel";
+import ResourceGUI from "./components/gui/ResourceGUI";
 
 export const fontZY = localFont({
   src: "./fonts/ZhunYuan.ttf",
@@ -18,38 +19,39 @@ export const client = new Colyseus.Client("ws://localhost:2567");
 export let authRoom;
 
 export default function Home() {
-  const [_loggedIn, setLoggedIn] = useState(false);
   const [_token, setToken] = useState();
 
   const handleLoggedIn = async (_authRoom, token) => {
-    setLoggedIn(true);
+    console.log("_authRoom: " + _authRoom);
 
     authRoom = _authRoom;
 
     if (token !== _token) setToken(token);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    console.log("leaving auth room");
     authRoom.leave();
-    setLoggedIn(false);
+    setToken(null);
   };
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-center p-24 ${fontZY.className}`}
+      className={`flex min-h-screen flex-col items-center ${fontZY.className}`}
     >
-      {!_loggedIn ? (
+      {!_token ? (
         <LoginComponent onLoggedIn={handleLoggedIn} />
       ) : (
-        <div className="flex flex-col">
-          <div className="flex">
+        <div className="flex flex-col flex-1 w-1/2">
+          {/* <div className="flex">
             {_token && (
               <div className="mr-24">
                 <CharacterPanel token={_token} />
               </div>
             )}
             {_token && <InventoryPanel token={_token} />}
-          </div>
+          </div> */}
+          <ResourceGUI token={_token} />
           <Button
             variant="contained"
             className={`mt-5`}

@@ -11,13 +11,17 @@ export default function LoginComponent({ onLoggedIn }) {
 
   const joinAuthRoom = async () => {
     try {
+      console.log('joining auth room')
+
       const authRoom = await client.joinOrCreate("auth_room", {
         username: _username,
         password: _password,
       });
 
+      console.log('joined auth room')
+
       authRoom.onMessage("token", (token) => {
-        console.log("token received from server: " + token);
+        console.log('token received: ' + token)
         onLoggedIn(authRoom, token);
       });
     } catch (err) {
@@ -26,7 +30,7 @@ export default function LoginComponent({ onLoggedIn }) {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-1 justify-center">
       <MyTextField
         label="用户名"
         className={`mb-5`}

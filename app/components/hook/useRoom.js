@@ -15,6 +15,7 @@ export default function useRoom(roomName, token, onStateChange) {
     joinRoom();
 
     return () => {
+      console.log("leaving room: " + `${roomName}_${token}`);
       room?.leave?.();
       unlisten?.();
     };
