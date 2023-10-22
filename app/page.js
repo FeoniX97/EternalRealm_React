@@ -2,12 +2,12 @@
 
 import localFont from "next/font/local";
 import { useEffect, useState } from "react";
-import LoginComponent from "./components/LoginComponent";
-import { Button } from "@mui/material";
 import * as Colyseus from "colyseus.js";
+import ResourceGUI from "./components/gui/ResourceGUI";
+import MenuGUI from "./components/gui/MenuGUI";
 import CharacterPanel from "./components/panel/CharacterPanel";
 import InventoryPanel from "./components/panel/InventoryPanel";
-import ResourceGUI from "./components/gui/ResourceGUI";
+import LoginComponent from "./components/LoginComponent";
 
 export const fontZY = localFont({
   src: "./fonts/ZhunYuan.ttf",
@@ -16,51 +16,39 @@ export const fontZY = localFont({
 });
 
 export const client = new Colyseus.Client("ws://localhost:2567");
-export let authRoom;
+let authRoom;
 
 export default function Home() {
   const [_token, setToken] = useState();
 
-  const handleLoggedIn = async (_authRoom, token) => {
-    console.log("_authRoom: " + _authRoom);
-
-    authRoom = _authRoom;
-
-    if (token !== _token) setToken(token);
+  const handleLoggedIn = async (token) => {
+    setToken(token);
   };
 
-  const handleLogout = async () => {
-    console.log("leaving auth room");
-    authRoom.leave();
-    setToken(null);
-  };
+  // const handleLogout = async () => {
+  //   authRoom?.leave();
+  //   setToken(null);
+  // };
 
   return (
     <main
-      className={`flex min-h-screen flex-col items-center ${fontZY.className}`}
+      className={`relative flex min-h-screen flex-col items-center ${fontZY.className}`}
     >
       {!_token ? (
         <LoginComponent onLoggedIn={handleLoggedIn} />
       ) : (
-        <div className="flex flex-col flex-1 w-1/2">
-          {/* <div className="flex">
-            {_token && (
-              <div className="mr-24">
-                <CharacterPanel token={_token} />
+        <>
+          <div className="flex flex-col flex-1 w-1/2">
+            <div class="flex flex-col flex-1 justify-end">
+              <div className="flex">
+                <ResourceGUI token={_token} />
+                <MenuGUI />
               </div>
-            )}
-            {_token && <InventoryPanel token={_token} />}
-          </div> */}
-          <ResourceGUI token={_token} />
-          <Button
-            variant="contained"
-            className={`mt-5`}
-            style={{ backgroundColor: "#2196F3" }}
-            onClick={handleLogout}
-          >
-            登出
-          </Button>
-        </div>
+            </div>
+          </div>
+          {/* <CharacterPanel token={_token} />
+          <InventoryPanel token={_token} /> */}
+        </>
       )}
     </main>
   );

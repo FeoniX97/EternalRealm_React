@@ -22,7 +22,7 @@ export default function LoginComponent({ onLoggedIn }) {
 
       authRoom.onMessage("token", (token) => {
         console.log('token received: ' + token)
-        onLoggedIn(authRoom, token);
+        onLoggedIn(token);
       });
     } catch (err) {
       alert(err);
