@@ -46,8 +46,8 @@ export default function Home() {
               </div>
             </div>
           </div>
-          {/* <CharacterPanel token={_token} />
-          <InventoryPanel token={_token} /> */}
+          <CharacterPanel token={_token} />
+          <InventoryPanel token={_token} />
         </>
       )}
     </main>
